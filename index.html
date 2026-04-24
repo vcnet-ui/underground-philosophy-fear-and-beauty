@@ -32,7 +32,7 @@
     @keyframes drift { from{transform:translate(0,0)} to{transform:translate(40px,30px)} }
     .grain { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.03; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-repeat:repeat; background-size:256px; }
 
-    .container { position:relative; z-index:2; width:100%; padding:120px 28px 40px; text-align:center; border:1px solid rgba(201,168,76,0.25); animation:pulse 6s ease-in-out infinite; box-shadow:0 0 20px rgba(201,168,76,0.03),inset 0 0 20px rgba(201,168,76,0.02); }
+    .container { position:relative; z-index:2; width:100%; padding:60px 28px 40px; text-align:center; border:1px solid rgba(201,168,76,0.25); animation:pulse 6s ease-in-out infinite; box-shadow:0 0 20px rgba(201,168,76,0.03),inset 0 0 20px rgba(201,168,76,0.02); }
     @keyframes pulse { 0%,100%{border-color:rgba(201,168,76,0.15);} 50%{border-color:rgba(201,168,76,0.35);} }
 
     .phase { display:none; opacity:0; max-width:720px; margin:0 auto; }
@@ -46,7 +46,7 @@
     .title { font-family:'Cormorant Garamond',serif; font-size:clamp(44px,9vw,72px); font-weight:300; line-height:1.15; color:var(--text-bright); margin-bottom:28px; letter-spacing:-0.5px; }
     .topic-questions { font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:300; font-style:italic; color:var(--text-mid); line-height:1.6; max-width:560px; margin:0 auto 32px; }
     .meta { font-size:16px; color:var(--text-dim); margin-bottom:28px; line-height:1.7; }
-    .event-photo { width:100%; max-width:520px; margin:0 auto 8px; border:1px solid var(--border); position:relative; }
+    .event-photo { width:100%; max-width:520px; margin:0 auto 32px; border:1px solid var(--border); position:relative; }
     .event-photo img { width:100%; display:block; }
     .photo-slide { position:absolute; top:0; left:0; width:100%; opacity:0; transition:opacity 2s ease; }
     .photo-slide:first-child { position:relative; }
@@ -162,7 +162,7 @@
     <div class="phase active" id="phase-invite">
       <p class="label">Underground Philosophy</p>
       <h1 class="title">Fear &amp; Beauty</h1>
-      <p class="topic-questions">What, really, is beauty? Can beauty strike fear? How might fear lie between us and the realisation of more beauty in our lives, and the world?</p>
+      <p class="topic-questions">What, really, is beauty? Can beauty strike fear? How might fear lie between us and the realisation of more beauty in our lives, and in the world?</p>
       <p class="meta">Caz Reitop's Dirty Secrets, Collingwood &nbsp;&middot;&nbsp; Thu 21 May, doors 5.30pm &nbsp;&middot;&nbsp; 25 seats</p>
       <div class="event-photo">
         <img src="2.jpg" alt="" class="photo-slide active" id="slide1">
