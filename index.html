@@ -360,6 +360,9 @@
       var c=document.getElementById('roomContent');
       c.classList.toggle('open');
       track('opened room reveal');
+      // Notify parent iframe of height change
+      setTimeout(rh, 100);
+      setTimeout(rh, 500);
       if(c.classList.contains('open')){
         setTimeout(function(){
           var btn=document.querySelector('#phase-context .btn-next');
