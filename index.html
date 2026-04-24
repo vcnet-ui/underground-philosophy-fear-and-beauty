@@ -203,7 +203,6 @@
         <div class="room-content" id="roomContent">
           <p class="room-group-label">Voicecraft Network</p>
           <div class="room-faces">
-            <div class="room-person"><img src="tim.jpg" alt="Tim Adalin"><span>Tim Adalin</span></div>
             <div class="room-person"><img src="jurn.jpg" alt="Jurn"><span>Jurn</span></div>
             <div class="room-person"><img src="les.jpg" alt="Elder Les Spencer"><span>Elder Les Spencer</span></div>
             <div class="room-person"><img src="taryn.jpg" alt="Taryn"><span>Taryn</span></div>
@@ -361,6 +360,12 @@
       var c=document.getElementById('roomContent');
       c.classList.toggle('open');
       track('opened room reveal');
+      if(c.classList.contains('open')){
+        setTimeout(function(){
+          var btn=document.querySelector('#phase-context .btn-next');
+          if(btn)btn.scrollIntoView({behavior:'smooth',block:'center'});
+        },400);
+      }
     }
 
     // Phase 3 actions
