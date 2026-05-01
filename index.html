@@ -142,6 +142,50 @@
     .logo-footer img { width:150px; height:150px; object-fit:contain; animation:spin 60s linear infinite reverse; }
     @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
+    /* Guide arrow */
+    .guide-arrow {
+      position: absolute;
+      right: 8px;
+      width: 140px;
+      height: 100px;
+      opacity: 0;
+      animation: arrowAppear 1.5s ease 2s forwards;
+      pointer-events: none;
+    }
+    .guide-arrow svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .guide-arrow .arrow-path {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-dasharray: 160;
+      stroke-dashoffset: 160;
+      animation: drawArrow 2s ease 2.2s forwards;
+    }
+    .guide-arrow .arrow-tip {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      opacity: 0;
+      animation: tipAppear 0.5s ease 4s forwards;
+    }
+    @keyframes arrowAppear {
+      0% { opacity: 0; }
+      100% { opacity: 0.55; }
+    }
+    @keyframes drawArrow {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes tipAppear {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
     @media (max-width:520px) {
       .container { padding:60px 20px 40px; }
       .btn-gold, .btn-next { padding:16px 36px; }
@@ -152,6 +196,7 @@
       .how-label { text-align:left; min-width:auto; }
       .room-person { width:70px; }
       .room-person img { width:48px; height:48px; }
+      .guide-arrow { right: 12px; }
     }
   </style>
 </head>
@@ -163,13 +208,19 @@
   <div class="container">
 
     <!-- PHASE 1: Hook -->
-    <div class="phase active" id="phase-invite">
-      <p class="label">Underground Philosophy</p>
+    <div class="phase active" id="phase-invite" style="position:relative;">
+      <div class="guide-arrow">
+        <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg">
+          <path class="arrow-path" d="M 120 0 C 120 50, 90 80, 45 90" />
+          <path class="arrow-tip" d="M 56 82 L 42 90 L 54 98" />
+        </svg>
+      </div>
+      <p class="label">Underground Philosophy Presents</p>
       <h1 class="title">Fear &amp; Beauty</h1>
       <p class="topic-questions">What, really, is beauty? Can beauty strike fear? How might fear lie between us and the realisation of more beauty in our lives, and in the world?</p>
       <p class="meta">Caz Reitop's Dirty Secrets, Collingwood &nbsp;&middot;&nbsp; Thu 21 May, doors 5.30pm &nbsp;&middot;&nbsp; 25 seats</p>
       <button class="btn-gold" onclick="goToPhase2()">Enter</button>
-      <div class="direct-link" style="margin-bottom:32px;"><a href="#" target="_blank" onclick="trackTicketClick('phase 1')">or go directly to tickets &rarr;</a></div>
+      <div class="direct-link" id="directTickets" style="margin-bottom:32px;"><a href="#" target="_blank" onclick="trackTicketClick('phase 1')">or go directly to tickets &rarr;</a></div>
       <div class="event-photo">
         <img src="2.jpg" alt="" class="photo-slide active" id="slide1">
         <img src="1.jpg" alt="" class="photo-slide" id="slide2">
@@ -323,6 +374,22 @@
       data.writingTime=writingDuration>0?writingDuration+'s':'';
       fetch(CONFIG.sheetsWebhook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){});
     }
+
+    // Position guide arrow to end at ticket link
+    function positionArrow() {
+      var arrow = document.querySelector('.guide-arrow');
+      var target = document.getElementById('directTickets');
+      var phase = document.getElementById('phase-invite');
+      if (arrow && target && phase) {
+        var targetRect = target.getBoundingClientRect();
+        var phaseRect = phase.getBoundingClientRect();
+        var targetCenter = targetRect.top + targetRect.height / 2 - phaseRect.top;
+        // Arrow is 180px tall, endpoint is at bottom, so start 180px above target
+        arrow.style.top = (targetCenter - 90) + 'px';
+      }
+    }
+    window.addEventListener('load', function() { setTimeout(positionArrow, 200); });
+    window.addEventListener('resize', positionArrow);
 
     // Landing beacon (3s)
     setTimeout(function(){send({landed:'Yes'});track('page loaded');},3000);
