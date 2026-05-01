@@ -42,7 +42,7 @@
     @keyframes fadeOut { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-12px)} }
 
     /* Phase 1 */
-    .label { font-size:14px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--text-dim); margin-bottom:28px; }
+    .label { font-size:16px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--text-bright); margin-bottom:28px; }
     .title { font-family:'Cormorant Garamond',serif; font-size:clamp(44px,9vw,72px); font-weight:300; line-height:1.15; color:var(--text-bright); margin-bottom:28px; letter-spacing:-0.5px; }
     .topic-questions { font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:300; font-style:italic; color:var(--text-mid); line-height:1.6; max-width:560px; margin:0 auto 32px; }
     .meta { font-size:16px; color:var(--text-dim); margin-bottom:28px; line-height:1.7; }
@@ -275,7 +275,7 @@
         </div>
       </div>
 
-      <button class="btn-next" onclick="goToPhase3()">Continue</button>
+      <button class="btn-gold btn-enter" style="margin-top:32px;" onclick="goToPhase3()">Continue</button>
       <div class="direct-link"><a href="#" target="_blank" onclick="trackTicketClick('phase 2')">or go directly to tickets &rarr;</a></div>
     </div>
 
