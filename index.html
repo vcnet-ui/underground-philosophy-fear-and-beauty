@@ -42,9 +42,9 @@
     @keyframes fadeOut { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-12px)} }
 
     /* Phase 1 */
-    .label { font-size:16px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--text-bright); margin-bottom:28px; }
+    .label { font-size:16px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--text-mid); margin-bottom:28px; }
     .title { font-family:'Cormorant Garamond',serif; font-size:clamp(44px,9vw,72px); font-weight:300; line-height:1.15; color:var(--text-bright); margin-bottom:28px; letter-spacing:-0.5px; }
-    .topic-questions { font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:300; font-style:italic; color:var(--text-mid); line-height:1.6; max-width:560px; margin:0 auto 32px; }
+    .topic-questions { font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:300; font-style:italic; color:var(--text-bright); line-height:1.6; max-width:560px; margin:0 auto 32px; }
     .meta { font-size:16px; color:var(--text-dim); margin-bottom:28px; line-height:1.7; }
     .event-photo { width:100%; max-width:520px; margin:0 auto 32px; border:1px solid var(--border); position:relative; }
     .event-photo img { width:100%; display:block; }
@@ -207,7 +207,7 @@
       .how-label { text-align:left; min-width:auto; }
       .room-person { width:70px; }
       .room-person img { width:48px; height:48px; }
-      .guide-arrow { right: 12px; }
+      .guide-arrow { display: none; }
     }
   </style>
 </head>
@@ -240,7 +240,13 @@
     </div>
 
     <!-- PHASE 2: Context -->
-    <div class="phase" id="phase-context">
+    <div class="phase" id="phase-context" style="position:relative;">
+      <div class="guide-arrow guide-arrow-p2">
+        <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg">
+          <path class="arrow-path" d="M 120 0 C 120 50, 90 80, 45 90" />
+          <path class="arrow-tip" d="M 56 82 L 42 90 L 54 98" />
+        </svg>
+      </div>
       <p class="vid-label">Dialogue at Underground Philosophy</p>
       <div class="video-wrapper" id="phase2VideoWrapper">
         <img id="phase2Poster" src="" alt="Video thumbnail">
@@ -276,7 +282,7 @@
       </div>
 
       <button class="btn-gold btn-enter" style="margin-top:32px;" onclick="goToPhase3()">Continue</button>
-      <div class="direct-link"><a href="#" target="_blank" onclick="trackTicketClick('phase 2')">or go directly to tickets &rarr;</a></div>
+      <div class="direct-link" id="directTicketsP2"><a href="#" target="_blank" onclick="trackTicketClick('phase 2')">or go directly to tickets &rarr;</a></div>
     </div>
 
     <!-- PHASE 3: Intention + Tickets -->
@@ -407,21 +413,31 @@
       fetch(CONFIG.sheetsWebhook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){});
     }
 
-    // Position guide arrow to end at ticket link
-    function positionArrow() {
-      var arrow = document.querySelector('.guide-arrow');
-      var target = document.getElementById('directTickets');
-      var phase = document.getElementById('phase-invite');
-      if (arrow && target && phase) {
-        var targetRect = target.getBoundingClientRect();
-        var phaseRect = phase.getBoundingClientRect();
-        var targetCenter = targetRect.top + targetRect.height / 2 - phaseRect.top;
-        // Arrow is 180px tall, endpoint is at bottom, so start 180px above target
-        arrow.style.top = (targetCenter - 90) + 'px';
+    // Position guide arrows to end at their respective ticket links
+    function positionArrows() {
+      // Phase 1 arrow
+      var arrow1 = document.querySelector('#phase-invite .guide-arrow');
+      var target1 = document.getElementById('directTickets');
+      var phase1 = document.getElementById('phase-invite');
+      if (arrow1 && target1 && phase1) {
+        var t1Rect = target1.getBoundingClientRect();
+        var p1Rect = phase1.getBoundingClientRect();
+        var t1Center = t1Rect.top + t1Rect.height / 2 - p1Rect.top;
+        arrow1.style.top = (t1Center - 90) + 'px';
+      }
+      // Phase 2 arrow
+      var arrow2 = document.querySelector('#phase-context .guide-arrow');
+      var target2 = document.getElementById('directTicketsP2');
+      var phase2 = document.getElementById('phase-context');
+      if (arrow2 && target2 && phase2) {
+        var t2Rect = target2.getBoundingClientRect();
+        var p2Rect = phase2.getBoundingClientRect();
+        var t2Center = t2Rect.top + t2Rect.height / 2 - p2Rect.top;
+        arrow2.style.top = (t2Center - 90) + 'px';
       }
     }
-    window.addEventListener('load', function() { setTimeout(positionArrow, 200); });
-    window.addEventListener('resize', positionArrow);
+    window.addEventListener('load', function() { setTimeout(positionArrows, 200); });
+    window.addEventListener('resize', positionArrows);
 
     // Landing beacon (3s)
     setTimeout(function(){send({landed:'Yes'});track('page loaded');},3000);
@@ -460,12 +476,14 @@
       var c=document.getElementById('roomContent');
       c.classList.toggle('open');
       track('opened room reveal');
-      // Notify parent iframe of height change
+      // Reposition Phase 2 arrow after content change
       setTimeout(rh, 100);
       setTimeout(rh, 500);
+      setTimeout(positionArrows, 100);
+      setTimeout(positionArrows, 600);
       if(c.classList.contains('open')){
         setTimeout(function(){
-          var btn=document.querySelector('#phase-context .btn-next');
+          var btn=document.querySelector('#phase-context .btn-enter');
           if(btn)btn.scrollIntoView({behavior:'smooth',block:'center'});
         },400);
       }
@@ -554,7 +572,7 @@
     window.addEventListener('load',function(){setTimeout(rh,100);});
     window.addEventListener('resize',rh);
     var ot=transition;
-    transition=function(a,b){ot(a,b);setTimeout(rh,1000);};
+    transition=function(a,b){ot(a,b);setTimeout(rh,1000);setTimeout(positionArrows,800);setTimeout(positionArrows,1200);};
   </script>
 
 </body>
